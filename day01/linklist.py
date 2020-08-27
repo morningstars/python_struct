@@ -9,7 +9,7 @@ class Linklist(object):
     def __init__(self):
         self.head = Node(None)
 
-    def initList(self, list):
+    def init_list(self, list):
 
         p = self.head
 
@@ -80,11 +80,12 @@ class Linklist(object):
         else:
             raise ValueError(str(item) + " is not in list")
 
+
 if __name__ == "__main__":
     list = Linklist()
     l = [1, 2, 3, 4, 5]
 
-    list.initList(l)
+    list.init_list(l)
     list.show()
     print(list.get_length())
 
