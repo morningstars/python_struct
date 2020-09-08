@@ -35,11 +35,17 @@ Character Meaning
 # fd4 = open("file_write.py", mode="r", buffering=0, encoding="utf-8")
 fd = open("text2", mode="a")
 
-
 # # 开始读写
 # # fd.read()
 # fd.write("world")
 
 # 关闭文件
 fd.close()
+
+
+# 关键字 with
+# with：在不再需要访问文件后将文件关闭
+with open("text") as file_obj:
+    contents = file_obj.read()
+    print(contents)
 
