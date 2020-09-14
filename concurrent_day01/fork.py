@@ -18,11 +18,11 @@ import sys
 
 pid = os.fork()
 
-if pid < 0:
-    print("Success")
-elif pid == 0:
+if pid < 0: #失败
+    print("Fail")
+elif pid == 0: # 子进程
     print("New")
-else:
+else: # 父进程
     print("Old")
 
 print("Fork test over")
