@@ -41,10 +41,13 @@ for i in it:
     print(i.group())
 
 # fullmatch 完全匹配
-m = re.fullmatch(r'\w+', 'hello-1973')
+m = re.fullmatch(r'\w+', 'hello1973')
 print(m.group())
 
+# match 匹配开始位置
+m = re.match(r'[A-Z]\w*', 'Hello_World')
+print(m.group())
 
-# match 匹配
-m = re.match(r'\w+', 'hello-1973')
+# search 匹配第一处
+m = re.search(r'\S+', '好 \n 吗')
 print(m.group())
