@@ -17,8 +17,7 @@ for i in m:
 
         if port == result:
             pattern = r'[a-z0-9]{4}\.[a-z0-9]{4}\.[a-z0-9]{4}'
-            pattern2 = r'(\d{1,3}\.){3}\d{1,3}|unknow'
-            ip_str = re.search(pattern2, i).group()
+            ip_str = re.search(pattern, i).group()
             print(ip_str)
 
     except:
