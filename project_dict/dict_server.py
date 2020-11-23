@@ -1,20 +1,25 @@
 from socket import *
 from sql_method import *
+from multiprocessing import Process
+import signal
+import sys
 
-sql_method = Sql_method()
 
-socket = socket(AF_INET, SOCK_STREAM)
+def do_login(conn, msgs, sql_method):
+    if sql_method.login(msgs[1], msgs[2]):
+        conn.send(b'OK')
+    else:
+        conn.send(b'Failure')
 
-socket.bind(('0.0.0.0', 8088))
-socket.listen(5)
 
-while True:
-    try:
-        conn, addr = socket.accept()
-    except KeyboardInterrupt as e:
-        print(e)
-        break
+def do_register(conn, msgs, sql_method):
+    if sql_method.register(msgs[1], msgs[2]):
+        conn.send(b'OK')
+    else:
+        conn.send(b'Failure')
 
+
+def handle_request(conn, sql_method):
     while True:
         data = conn.recv(1024).decode()
         if not data:
@@ -23,19 +28,33 @@ while True:
         msgs = data.split(' ')
         print("接收到：", msgs)
 
-        msg_back = None
         if msgs[0] == 'L':
-            if sql_method.login(msgs[1], msgs[2]):
-                msg_back = "Login Success!"
-            else:
-                msg_back = "Login Failure!"
+            do_login(conn, msgs, sql_method)
         elif msgs[0] == 'R':
-            if sql_method.register(msgs[1], msgs[2]):
-                msg_back = "Register Success!"
-            else:
-                msg_back = "Register Failure!"
-        conn.send(msg_back.encode())
+            do_register(conn, msgs, sql_method)
 
     conn.close()
 
-socket.close()
+    socket.close()
+
+
+def main():
+    s = socket(AF_INET, SOCK_STREAM)
+    s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+    s.bind(('0.0.0.0', 8088))
+    s.listen(5)
+
+    sql_method = Sql_method()
+
+    while True:
+        try:
+            conn, addr = s.accept()
+        except KeyboardInterrupt as e:
+            print(e)
+            break
+
+        handle_request(conn, sql_method)
+
+
+if __name__ == '__main__':
+    main()

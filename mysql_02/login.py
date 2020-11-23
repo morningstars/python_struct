@@ -1,5 +1,6 @@
 import pymysql
 
+
 class Login:
     def __init__(self,
                  database='stu',
@@ -18,6 +19,8 @@ class Login:
         self.table = table
 
         self.connect_db()
+        self.db = None
+        self.cur = None
 
     def connect_db(self):
         self.db = pymysql.connect(host=self.host,

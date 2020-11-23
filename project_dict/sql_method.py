@@ -1,4 +1,5 @@
 import pymysql
+import hashlib
 
 
 class Sql_method:
@@ -6,7 +7,7 @@ class Sql_method:
                  database='stu',
                  host='localhost',
                  user='root',
-                 password='b23baoqiq6',
+                 password='',  # b23baoqiq6
                  port=3306,
                  charset='utf8',
                  table='user'):
@@ -17,6 +18,9 @@ class Sql_method:
         self.port = port
         self.charset = charset
         self.table = table
+
+        self.db = None
+        self.cur = None
 
         self.connect_db()
 
@@ -39,7 +43,11 @@ class Sql_method:
         if self.cur.fetchone():
             return False
 
-        sql = "insert into %s(username,password) values('%s','%s');" % (self.table, username, password)
+        # 加密处理
+        hash = hashlib.md5((username + "the-salt").encode())
+        hash.update(password.encode())
+
+        sql = "insert into %s(username,password) values('%s','%s');" % (self.table, username, hash.hexdigest())
         try:
             self.cur.execute(sql)
             self.db.commit()
